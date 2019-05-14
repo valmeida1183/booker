@@ -10,7 +10,7 @@ export class Recipe {
     } */
 
     // All de code above can be simplified by this sintax:
-    constructor(public name: string, 
-                public description: string, 
-                public imagePath: string){}
+    constructor(public name: string,
+                public description: string,
+                public imagePath: string) {}
 }

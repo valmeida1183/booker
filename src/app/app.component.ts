@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  state = 'recipe';
 
+  onStateChanged(state: string) {
+    this.state = state;
+  }
 }
