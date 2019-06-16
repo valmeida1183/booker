@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'bkr-header',
@@ -6,14 +6,7 @@ import { Component, OnInit, EventEmitter, Output } from '@angular/core';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-  @Output() changeState = new EventEmitter<string>();
-
   constructor() { }
 
-  ngOnInit() {
-  }
-
-  onchangeState(state: string) {
-    this.changeState.emit(state);
-  }
+  ngOnInit() {}
 }

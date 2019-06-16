@@ -1,9 +1,8 @@
-<bkr-header (changeState)="onStateChanged($event)"></bkr-header>
+<bkr-header></bkr-header>
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <bkr-recipes *ngIf="state === 'recipe'"></bkr-recipes>
-      <bkr-shopping-list *ngIf="state === 'shopping'"></bkr-shopping-list>
+      <router-outlet></router-outlet>
     </div>
   </div>
 </div>

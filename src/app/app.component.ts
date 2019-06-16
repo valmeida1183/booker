@@ -5,10 +5,4 @@ import { Component } from '@angular/core';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  state = 'recipe';
-
-  onStateChanged(state: string) {
-    this.state = state;
-  }
-}
+export class AppComponent {}

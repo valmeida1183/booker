@@ -38,6 +38,10 @@ export class RecipeService {
     return this.recipes.slice(); // slice sem argumentos retorna uma cópia do array.
   }
 
+  getRecipe(index: number) {
+    return this.recipes[index];
+  }
+
   addIngredientsToShoppingList(ingredients: Ingredient[]) {
     this.shoppingListService.setIngredients(ingredients);
   }
