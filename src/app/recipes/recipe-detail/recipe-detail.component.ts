@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Recipe } from '../recipe.model';
 import { RecipeService } from '../recipe.service';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
 @Component({
   selector: 'bkr-recipe-detail',
@@ -13,7 +13,8 @@ export class RecipeDetailComponent implements OnInit {
   id: number;
 
   constructor(private recipeService: RecipeService,
-              private activedRoute: ActivatedRoute) { }
+              private activedRoute: ActivatedRoute,
+              private router: Router) { }
 
   ngOnInit() {
     this.getRecipeFromRouteParams();
@@ -22,6 +23,11 @@ export class RecipeDetailComponent implements OnInit {
   onSendIngredientsToShoppingList() {
     // Poderia chamar diretamente o shopping list service para fazer isso.
     this.recipeService.addIngredientsToShoppingList(this.recipe.ingredients);
+  }
+
+  onDeleteRecipe() {
+    this.recipeService.deleteRecipe(this.id);
+    this.router.navigate(['recipes']);
   }
 
   private getRecipeFromRouteParams() {

@@ -1,15 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Recipe } from './recipe.model';
-import { RecipeService } from './recipe.service';
 
 @Component({
   selector: 'bkr-recipes',
   templateUrl: './recipes.component.html',
-  styleUrls: ['./recipes.component.css'],
-  providers: [RecipeService]
+  styleUrls: ['./recipes.component.css']
 })
 export class RecipesComponent implements OnInit {
-  constructor(private recipeService: RecipeService) { }
+  constructor() { }
 
   ngOnInit() {}
 
