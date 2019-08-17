@@ -5,6 +5,7 @@ import { ShoppingListComponent } from './shopping-list/shopping-list.component';
 import { RecipeDetailComponent } from './recipes/recipe-detail/recipe-detail.component';
 import { RecipeStartComponent } from './recipes/recipe-start/recipe-start.component';
 import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
+import { RecipeResolverService } from './recipes/recipe-resolver.service';
 
 const routes: Routes = [
   // todas as rotas atendem por '', portanto só redirecionará para recipes se a rota absoluta for '' com o uso do pathMatch: 'full'
@@ -12,8 +13,16 @@ const routes: Routes = [
   { path: 'recipes', component: RecipesComponent, children: [
     { path: '', component: RecipeStartComponent },
     { path: 'new', component: RecipeEditComponent}, // a rota "new" deve vir antes da ":id", lembrando rotas mais genéricas devem vir depois
-    { path: ':id', component: RecipeDetailComponent},
-    { path: ':id/edit', component: RecipeEditComponent}
+    {
+      path: ':id',
+      component: RecipeDetailComponent,
+      resolve: [RecipeResolverService]
+    },
+    {
+      path: ':id/edit',
+      component: RecipeEditComponent,
+      resolve: [RecipeResolverService]
+    }
   ]
   },
   { path: 'shopping-list', component: ShoppingListComponent}
