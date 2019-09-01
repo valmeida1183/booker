@@ -6,11 +6,16 @@ import { RecipeDetailComponent } from './recipes/recipe-detail/recipe-detail.com
 import { RecipeStartComponent } from './recipes/recipe-start/recipe-start.component';
 import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
 import { RecipeResolverService } from './recipes/recipe-resolver.service';
+import { AuthComponent } from './auth/auth.component';
+import { AuthGuard } from './auth/auth-guard.guard';
 
 const routes: Routes = [
   // todas as rotas atendem por '', portanto só redirecionará para recipes se a rota absoluta for '' com o uso do pathMatch: 'full'
   { path: '', redirectTo: '/recipes', pathMatch: 'full'},
-  { path: 'recipes', component: RecipesComponent, children: [
+  { path: 'recipes',
+    component: RecipesComponent,
+    canActivate: [AuthGuard],
+    children: [
     { path: '', component: RecipeStartComponent },
     { path: 'new', component: RecipeEditComponent}, // a rota "new" deve vir antes da ":id", lembrando rotas mais genéricas devem vir depois
     {
@@ -25,7 +30,8 @@ const routes: Routes = [
     }
   ]
   },
-  { path: 'shopping-list', component: ShoppingListComponent}
+  { path: 'shopping-list', component: ShoppingListComponent},
+  { path: 'auth', component: AuthComponent}
 ];
 
 @NgModule({
