@@ -1,8 +1,13 @@
+<ng-template bkrPlaceholder></ng-template>
 <div class="row">
   <div class="col-xs-12 col-md-offset-3 col-md-6">
-    <div class="alert alert-danger" *ngIf="errorMessage">
+    <!-- <div class="alert alert-danger" *ngIf="errorMessage">
       <p>{{errorMessage}}</p>
-    </div>
+    </div> -->
+    <!-- <bkr-alert [message]="errorMessage" 
+               (close)="onHandleError()" 
+               *ngIf="errorMessage">
+    </bkr-alert> -->        
     <div *ngIf="isLoading" style="text-align: center">
         <bkr-loading-spinner></bkr-loading-spinner>
     </div>

@@ -1,22 +1,31 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ComponentFactoryResolver, ViewChild, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import { AuthService } from './auth.service';
 import { AuthResponseData } from './authResponseData.model';
+import { PlaceholderDirective } from '../shared/placeholder/placeholder.directive';
+import { AlertComponent } from '../shared/alert/alert.component';
 
 @Component({
   selector: 'bkr-auth',
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.css']
 })
-export class AuthComponent implements OnInit {
+export class AuthComponent implements OnInit, OnDestroy {
   isLoginMode = true;
   isLoading = false;
   errorMessage: string = null;
+  closeSub: Subscription;
+  @ViewChild(PlaceholderDirective) alerHost: PlaceholderDirective;
 
-  constructor(private authService: AuthService, private router: Router) {}
+
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private componentFactoryResolver: ComponentFactoryResolver
+  ) {}
 
   ngOnInit() {
   }
@@ -46,9 +55,43 @@ export class AuthComponent implements OnInit {
     }, errorMessage => {
       console.error(errorMessage);
       this.errorMessage = errorMessage;
+      this.showErrorAlert(errorMessage);
       this.isLoading = false;
     });
 
     form.reset();
+  }
+
+  onHandleError() {
+    this.errorMessage = null;
+  }
+
+  private showErrorAlert(message: string) {
+    /*
+      Este approach apresenta a instanciação de um componente via código, e controla sua aparição e remoção,
+      em geral a abordagem mais usual é com ngIf ou até mesmo ngShow, mas aqui fica um exemplo com a criação
+      dinâmica do componente de alerta.
+    */
+
+    // cria a classe que sabe como instanciar o component do type desejado da maneira que o angular faz.
+    const alertComponentFactory = this.componentFactoryResolver.resolveComponentFactory(AlertComponent);
+
+    // referência para o lugar onde o componente será injetado no DOM.
+    const hostViewConteinerRef = this.alerHost.viewContainerRef;
+    hostViewConteinerRef.clear();
+
+    const componentRef = hostViewConteinerRef.createComponent(alertComponentFactory);
+    componentRef.instance.message = message;
+    this.closeSub = componentRef.instance.close.subscribe(() => {
+      this.closeSub.unsubscribe();
+      hostViewConteinerRef.clear();
+    });
+  }
+
+
+  ngOnDestroy() {
+   if (this.closeSub) {
+     this.closeSub.unsubscribe();
+   }
   }
 }
