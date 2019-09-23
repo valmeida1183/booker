@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 
 import { Ingredient } from '../shared/ingredient.model';
 import { ShoppingListService } from './shopping-list.service';
+import { LogginService } from '../loggin.service';
 
 @Component({
     selector: 'bkr-shopping-list',
@@ -13,7 +14,7 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
     ingredients: Ingredient[];
     private subscription: Subscription;
 
-    constructor(private shoppingListService: ShoppingListService) { }
+    constructor(private shoppingListService: ShoppingListService, private loggingService: LogginService) { }
 
     ngOnInit() {
         this.ingredients = this.shoppingListService.getIngredients();
@@ -21,6 +22,8 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
             .subscribe((ingredients: Ingredient[]) => {
              this.ingredients = ingredients;
         });
+
+        this.loggingService.printLog('Hello from ShoppngListComponent ngOnInit!');
     }
 
     ngOnDestroy() {
