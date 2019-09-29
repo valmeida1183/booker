@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { catchError, tap } from 'rxjs/operators';
+import { throwError, BehaviorSubject } from 'rxjs';
 
 import { AuthResponseData } from './authResponseData.model';
-import { throwError, BehaviorSubject } from 'rxjs';
 import { User } from './user.model';
-import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,7 @@ export class AuthService {
 
   signup(email: string, password: string) {
     return this.http.post<AuthResponseData>(
-      'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAKWqApDhZK8Y98rtRtPaAr21IxEXYeJzE',
+      `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${environment}`,
       {
         email,
         password,
@@ -38,7 +39,7 @@ export class AuthService {
 
   login(email: string, password: string) {
     return this.http.post<AuthResponseData>(
-      'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAKWqApDhZK8Y98rtRtPaAr21IxEXYeJzE',
+      `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${environment}`,
       {
         email,
         password,
