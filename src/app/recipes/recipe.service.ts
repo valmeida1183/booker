@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Subject } from 'rxjs';
 
 import { Recipe } from './recipe.model';
 import { Ingredient } from '../shared/ingredient.model';
-import { ShoppingListService } from '../shopping-list/shopping-list.service';
-import { Subject } from 'rxjs';
+// Sintaxe de agrupar tudo de um arquivo em um objeto.
+import * as ShoppingListActions from '../state-management/actions/shopping-list.action';
+import * as fromShoppingList from '../state-management/reducers/shopping-list.reducer';
 
 @Injectable()
 export class RecipeService {
@@ -36,7 +39,9 @@ export class RecipeService {
   recipesChanged = new Subject<Recipe[]>();
   //#endregion
 
-  constructor(private shoppingListService: ShoppingListService) { }
+  constructor(
+    // private shoppingListService: ShoppingListService, -> Este serviço foi substituido pela abordagem do Ngrx
+    private store: Store<fromShoppingList.AppState>) { }
 
   setRecipes(recipes: Recipe[]) {
     this.recipes = recipes;
@@ -52,7 +57,9 @@ export class RecipeService {
   }
 
   addIngredientsToShoppingList(ingredients: Ingredient[]) {
-    this.shoppingListService.addIngredients(ingredients);
+    // this.shoppingListService.addIngredients(ingredients);
+    const addIngredientsAction = new ShoppingListActions.AddIngredients(ingredients);
+    this.store.dispatch(addIngredientsAction);
   }
 
   addRecipe(recipe: Recipe) {
