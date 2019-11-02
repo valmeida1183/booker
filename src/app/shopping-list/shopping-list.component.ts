@@ -4,8 +4,8 @@ import { Store } from '@ngrx/store';
 
 import { Ingredient } from '../shared/ingredient.model';
 import { LogginService } from '../loggin.service';
-import * as fromShoppingList from '../state-management/reducers/shopping-list.reducer';
 import * as ShoppingListActions from '../state-management/actions/shopping-list.action';
+import * as fromApp from '../state-management/reducers/app.reducer';
 
 @Component({
     selector: 'bkr-shopping-list',
@@ -19,7 +19,7 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
     constructor(
         // private shoppingListService: ShoppingListService, -> Este serviço foi substituido pela abordagem do Ngrx
         private loggingService: LogginService,
-        private store: Store<fromShoppingList.AppState>) { }
+        private store: Store<fromApp.AppState>) { }
 
     ngOnInit() {
         // recebendo valores do objeto 'shoppingList' alocado na store do NgRx (Retorna um observable)

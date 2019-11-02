@@ -3,22 +3,26 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { catchError, tap } from 'rxjs/operators';
 import { throwError, BehaviorSubject } from 'rxjs';
+import { Store } from '@ngrx/store';
 
 import { AuthResponseData } from './authResponseData.model';
 import { User } from './user.model';
 import { environment } from '../../environments/environment';
+import * as fromApp from '../state-management/reducers/app.reducer';
+import * as AuthActions from '../state-management/actions/auth.actions';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class AuthService {
   /* BehaviorSubject são ideais para representar valores através do tempo, basicamente recebe o valor do estado anterior */
-  user = new BehaviorSubject<User>(null);
+  // user = new BehaviorSubject<User>(null);
   private tokenExpirationTimer: any;
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private store: Store<fromApp.AppState>) { }
 
-  signup(email: string, password: string) {
+ /*  signup(email: string, password: string) {
     return this.http.post<AuthResponseData>(
       `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${environment.firebaseApiKey}`,
       {
@@ -26,18 +30,19 @@ export class AuthService {
         password,
         returnSecureToken: true
       }
-      // usando o operador catchError para capturar erros
     ).pipe(
+      // usando o operador catchError para capturar erros
       catchError(this.handleError),
-      /* Relembrando... o operador tap não interrompe, bloqueia ou altera o "observable chain",
-      ele simplesmente permite rodar algum código com os dados retornados do observalbe.*/
+      // Relembrando... o operador tap não interrompe, bloqueia ou altera o "observable chain",
+      ele simplesmente permite rodar algum código com os dados retornados do observalbe./
       tap(responseData => {
         this.handleAuthentication(responseData);
       })
     );
   }
+  */
 
-  login(email: string, password: string) {
+  /* login(email: string, password: string) {
     return this.http.post<AuthResponseData>(
       `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${environment.firebaseApiKey}`,
       {
@@ -51,7 +56,7 @@ export class AuthService {
         this.handleAuthentication(responseData);
       })
     );
-  }
+  } */
 
   autoLogin() {
     const userData: {
@@ -73,7 +78,15 @@ export class AuthService {
     );
 
     if (loadedUser.token) {
-      this.user.next(loadedUser);
+      // this.user.next(loadedUser);
+      const { email, id, token } = loadedUser;
+      this.store.dispatch(new AuthActions.AuthenticateSuccess({
+        email,
+        userId: id,
+        token,
+        expirationDate: new Date(userData._tokenExpirationDate)
+      })
+      );
 
       // caulcula o tempo restante que o token do user do localstorage está válido. (pois pode ter se logado a bastante tempo).
       const expirationDuration =
@@ -83,8 +96,8 @@ export class AuthService {
   }
 
   logout() {
-    this.user.next(null);
-    this.router.navigate(['/auth']);
+    // this.user.next(null);
+    this.store.dispatch(new AuthActions.Logout());
     localStorage.removeItem('userData');
 
     if (this.tokenExpirationTimer) {
@@ -105,7 +118,14 @@ export class AuthService {
     const expirationDate = new Date(currentTime + (+responseData.expiresIn * 1000));
     const user = new User(responseData.email, responseData.localId, responseData.idToken, expirationDate);
 
-    this.user.next(user);
+    // this.user.next(user);
+    this.store.dispatch(new AuthActions.AuthenticateSuccess({
+        email: responseData.email,
+        userId: responseData.localId,
+        token: responseData.idToken,
+        expirationDate
+      })
+    );
     this.autoLogout(+responseData.expiresIn * 1000);
 
     // salva no local storage o user inteiro

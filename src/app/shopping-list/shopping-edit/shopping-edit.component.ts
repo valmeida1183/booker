@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 import { Ingredient } from '../../shared/ingredient.model';
 // Sintaxe de agrupar tudo de um arquivo em um objeto.
 import * as ShoppingListActions from '../../state-management/actions/shopping-list.action';
-import * as fromShoppingList from '../../state-management/reducers/shopping-list.reducer';
+import * as fromApp from '../../state-management/reducers/app.reducer';
 
 @Component({
   selector: 'bkr-shopping-edit',
@@ -22,7 +22,7 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
 
   constructor(
     // private shoppingListService: ShoppingListService, -> Este serviço foi substituido pela abordagem do Ngrx
-    private store: Store<fromShoppingList.AppState>) { }
+    private store: Store<fromApp.AppState>) { }
 
   ngOnInit() {
     this.subscription = this.store.select('shoppingList').subscribe(stateData => {
