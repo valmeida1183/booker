@@ -58,7 +58,7 @@ export class AuthService {
     );
   } */
 
-  autoLogin() {
+  /* autoLogin() {
     const userData: {
       email: string,
       id: string,
@@ -81,11 +81,11 @@ export class AuthService {
       // this.user.next(loadedUser);
       const { email, id, token } = loadedUser;
       this.store.dispatch(new AuthActions.AuthenticateSuccess({
-        email,
-        userId: id,
-        token,
-        expirationDate: new Date(userData._tokenExpirationDate)
-      })
+          email,
+          userId: id,
+          token,
+          expirationDate: new Date(userData._tokenExpirationDate)
+        })
       );
 
       // caulcula o tempo restante que o token do user do localstorage está válido. (pois pode ter se logado a bastante tempo).
@@ -93,9 +93,9 @@ export class AuthService {
         new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
       this.autoLogout(expirationDuration);
     }
-  }
+  } */
 
-  logout() {
+  /* logout() {
     // this.user.next(null);
     this.store.dispatch(new AuthActions.Logout());
     localStorage.removeItem('userData');
@@ -104,16 +104,22 @@ export class AuthService {
       clearTimeout(this.tokenExpirationTimer);
     }
     this.tokenExpirationTimer = null;
-  }
+  } */
 
-  autoLogout(expirationDuration: number) {
-    console.log(expirationDuration);
+  setLogoutTimer(expirationDuration: number) {
     this.tokenExpirationTimer = setTimeout(() => {
-      this.logout();
+      this.store.dispatch(new AuthActions.Logout());
     }, expirationDuration);
   }
 
-  private handleAuthentication(responseData: AuthResponseData) {
+  clearLogoutTimer() {
+    if (this.tokenExpirationTimer) {
+      clearTimeout(this.tokenExpirationTimer);
+      this.tokenExpirationTimer = null;
+    }
+  }
+
+  /* private handleAuthentication(responseData: AuthResponseData) {
     const currentTime = new Date().getTime();
     const expirationDate = new Date(currentTime + (+responseData.expiresIn * 1000));
     const user = new User(responseData.email, responseData.localId, responseData.idToken, expirationDate);
@@ -130,9 +136,9 @@ export class AuthService {
 
     // salva no local storage o user inteiro
     localStorage.setItem('userData', JSON.stringify(user));
-  }
+  } */
 
-  private handleError(errorResponse: HttpErrorResponse) {
+  /* private handleError(errorResponse: HttpErrorResponse) {
     let errorMessage = 'An unknown error ocurred!';
     if (!errorResponse.error || !errorResponse.error.error) {
       // throwError para devolver um novo observalbe com um mensagem mais amigável.
@@ -151,5 +157,5 @@ export class AuthService {
         break;
     }
     return throwError(errorMessage);
-  }
+  } */
 }

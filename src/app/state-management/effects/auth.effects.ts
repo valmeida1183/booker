@@ -6,8 +6,12 @@ import { switchMap, catchError, map, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 import { AuthResponseData } from '../../../app/auth/authResponseData.model';
+import { AuthService } from 'src/app/auth/auth.service';
 import * as AuthActions from '../actions/auth.actions';
 import { environment } from '../../../environments/environment';
+import { User } from 'src/app/auth/user.model';
+
+// Effects no NgRx é utilizado para tratar "side Effects", que neste exemplo são Http Requests, manipalações no localStorage e roteamento.
 
 @Injectable()
 export class AuthEffects {
@@ -23,6 +27,10 @@ export class AuthEffects {
                     returnSecureToken: true
                 }
             ).pipe(
+                tap(responseData => {
+                   const milisecondsExpirationTime = +responseData.expiresIn * 1000;
+                   this.authService.setLogoutTimer(milisecondsExpirationTime);
+                }),
                 map(responseData => {
                     return this.handleAuthentication(responseData);
                 }),
@@ -45,6 +53,10 @@ export class AuthEffects {
                     returnSecureToken: true
                 }
             ).pipe(
+                tap(responseData => {
+                    const milisecondsExpirationTime = +responseData.expiresIn * 1000;
+                    this.authService.setLogoutTimer(milisecondsExpirationTime);
+                 }),
                 map(responseData => {
                     return this.handleAuthentication(responseData);
                 }),
@@ -57,17 +69,76 @@ export class AuthEffects {
 
     @Effect({ dispatch: false }) // um effect que não produz um novo observable.
     authRedirect = this.actions$.pipe(
-        ofType(AuthActions.AUTHENTICATE_SUCCESS, AuthActions.LOGOUT), // Ex. de effeito para multiplas actions
+        ofType(AuthActions.AUTHENTICATE_SUCCESS),
         tap(() => {
             this.router.navigate(['/']);
         }));
 
+    @Effect()
+    autoLogin = this.actions$.pipe(
+        ofType(AuthActions.AUTO_LOGIN),
+        map(() => {
+            const userData: {
+                email: string,
+                id: string,
+                _token: string,
+                _tokenExpirationDate: string
+              } = JSON.parse(localStorage.getItem('userData'));
+
+            if (!userData) {
+                return { type: 'DUMMY' };
+            }
+
+            const loadedUser = new User(
+                userData.email,
+                userData.id,
+                userData._token,
+                new Date(userData._tokenExpirationDate)
+              );
+
+            if (loadedUser.token) {
+                // this.user.next(loadedUser);
+
+                // caulcula o tempo restante que o token do user do localstorage está válido. (pois pode ter se logado a bastante tempo).
+                const expirationDuration =
+                  new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
+                this.authService.setLogoutTimer(expirationDuration);
+
+                const { email, id, token } = loadedUser;
+                return new AuthActions.AuthenticateSuccess({
+                    email,
+                    userId: id,
+                    token,
+                    expirationDate: new Date(userData._tokenExpirationDate)
+                  });
+              }
+
+            return { type: 'DUMMY' };
+        })
+    );
+
+    @Effect({ dispatch: false })
+    authLogout = this.actions$.pipe(
+        ofType(AuthActions.LOGOUT),
+        tap(() => {
+            this.authService.clearLogoutTimer();
+            localStorage.removeItem('userData');
+            this.router.navigate(['/auth']);
+        })
+    );
+
     // $ significa que é um Observalbe é um padrão do Ngrx, não é necessário nomear assim.
-    constructor(private actions$: Actions, private http: HttpClient, private router: Router) { }
+    constructor(
+        private actions$: Actions,
+        private http: HttpClient,
+        private router: Router,
+        private authService: AuthService) { }
 
     private handleAuthentication(responseData: AuthResponseData) {
         const currentTime = new Date().getTime();
         const expirationDate = new Date(currentTime + (+responseData.expiresIn * 1000));
+        const user = new User(responseData.email, responseData.localId, responseData.idToken, expirationDate);
+        localStorage.setItem('userData', JSON.stringify(user));
 
         return new AuthActions.AuthenticateSuccess({
             email: responseData.email,
@@ -78,8 +149,8 @@ export class AuthEffects {
     }
 
     private handleError(errorResponse: any) {
-        /* of vai criar um novo observable, pois um effect deve retornar um Observable,
-                    e o operador catchError ao contrário do map não produz um automaticamente */
+        /* 'of' vai criar um novo observable, pois um effect deve retornar um Observable,
+            e o operador catchError ao contrário do map não produz um automaticamente */
 
         let errorMessage = 'An unknown error ocurred!';
         if (!errorResponse.error || !errorResponse.error.error) {
