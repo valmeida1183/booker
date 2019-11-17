@@ -17,6 +17,7 @@ import * as fromApp from './state-management/reducers/app.reducer';
 // NgRX Effects
 import { AuthEffects } from './state-management/effects/auth.effects';
 import { environment } from '../environments/environment';
+import { RecipeEffects } from './state-management/effects/recipe.effects';
 @NgModule({
   declarations: [
     AppComponent,
@@ -31,7 +32,7 @@ import { environment } from '../environments/environment';
     SharedModule,
     // NgRx precisa saber que reducers estão involvidos ao iniciar o módulo.
     StoreModule.forRoot(fromApp.appReducer),
-    EffectsModule.forRoot([AuthEffects]),
+    EffectsModule.forRoot([AuthEffects, RecipeEffects]),
     StoreDevtoolsModule.instrument({ logOnly: environment.production }),
     StoreRouterConnectingModule.forRoot()
   ],

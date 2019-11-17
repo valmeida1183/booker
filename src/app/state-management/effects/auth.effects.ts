@@ -28,14 +28,14 @@ export class AuthEffects {
                 }
             ).pipe(
                 tap(responseData => {
-                   const milisecondsExpirationTime = +responseData.expiresIn * 1000;
-                   this.authService.setLogoutTimer(milisecondsExpirationTime);
+                    const milisecondsExpirationTime = +responseData.expiresIn * 1000;
+                    this.authService.setLogoutTimer(milisecondsExpirationTime);
                 }),
                 map(responseData => {
                     return this.handleAuthentication(responseData);
                 }),
                 catchError(errorResponse => {
-                   return this.handleError(errorResponse);
+                    return this.handleError(errorResponse);
                 })
             );
         })
@@ -56,7 +56,7 @@ export class AuthEffects {
                 tap(responseData => {
                     const milisecondsExpirationTime = +responseData.expiresIn * 1000;
                     this.authService.setLogoutTimer(milisecondsExpirationTime);
-                 }),
+                }),
                 map(responseData => {
                     return this.handleAuthentication(responseData);
                 }),
@@ -70,8 +70,10 @@ export class AuthEffects {
     @Effect({ dispatch: false }) // um effect que não produz um novo observable.
     authRedirect = this.actions$.pipe(
         ofType(AuthActions.AUTHENTICATE_SUCCESS),
-        tap(() => {
-            this.router.navigate(['/']);
+        tap((authSuccessAction: AuthActions.AuthenticateSuccess) => {
+            if (authSuccessAction.payload.redirect) {
+                this.router.navigate(['/']);
+            }
         }));
 
     @Effect()
@@ -83,7 +85,7 @@ export class AuthEffects {
                 id: string,
                 _token: string,
                 _tokenExpirationDate: string
-              } = JSON.parse(localStorage.getItem('userData'));
+            } = JSON.parse(localStorage.getItem('userData'));
 
             if (!userData) {
                 return { type: 'DUMMY' };
@@ -94,14 +96,14 @@ export class AuthEffects {
                 userData.id,
                 userData._token,
                 new Date(userData._tokenExpirationDate)
-              );
+            );
 
             if (loadedUser.token) {
                 // this.user.next(loadedUser);
 
                 // caulcula o tempo restante que o token do user do localstorage está válido. (pois pode ter se logado a bastante tempo).
                 const expirationDuration =
-                  new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
+                    new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
                 this.authService.setLogoutTimer(expirationDuration);
 
                 const { email, id, token } = loadedUser;
@@ -109,9 +111,10 @@ export class AuthEffects {
                     email,
                     userId: id,
                     token,
-                    expirationDate: new Date(userData._tokenExpirationDate)
-                  });
-              }
+                    expirationDate: new Date(userData._tokenExpirationDate),
+                    redirect: false
+                });
+            }
 
             return { type: 'DUMMY' };
         })
@@ -144,7 +147,8 @@ export class AuthEffects {
             email: responseData.email,
             userId: responseData.localId,
             token: responseData.idToken,
-            expirationDate
+            expirationDate,
+            redirect: true
         });
     }
 
