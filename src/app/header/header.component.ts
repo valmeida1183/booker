@@ -3,9 +3,9 @@ import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { map } from 'rxjs/operators';
 
-import * as fromApp from '../state-management/reducers/app.reducer';
-import * as AuthActions from '../state-management/actions/auth.actions';
-import * as RecipesActions from '../state-management/actions/recipe.action';
+import * as fromApp from '../store/app.reducer';
+import * as AuthActions from '../auth/store/auth.actions';
+import * as RecipesActions from '../recipes/store/recipe.action';
 
 @Component({
   selector: 'bkr-header',

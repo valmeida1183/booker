@@ -1,5 +1,5 @@
-import { Recipe } from 'src/app/recipes/recipe.model';
-import * as RecipeActions from '../actions/recipe.action';
+import { Recipe } from '../recipe.model';
+import * as RecipeActions from './recipe.action';
 
 export interface State {
     recipes: Recipe[];

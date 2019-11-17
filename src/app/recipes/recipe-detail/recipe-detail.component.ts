@@ -5,9 +5,9 @@ import { map, switchMap } from 'rxjs/operators';
 
 import { Recipe } from '../recipe.model';
 import { RecipeService } from '../recipe.service';
-import * as fromApp from '../../state-management/reducers/app.reducer';
-import * as RecipesActions from '../../state-management/actions/recipe.action';
-import * as ShoppingListActions from '../../state-management/actions/shopping-list.action';
+import * as fromApp from '../../store/app.reducer';
+import * as RecipesActions from '../store/recipe.action';
+import * as ShoppingListActions from '../../shopping-list/store/shopping-list.action';
 
 @Component({
   selector: 'bkr-recipe-detail',

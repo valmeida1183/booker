@@ -4,9 +4,9 @@ import { Injectable } from '@angular/core';
 import { switchMap, map, withLatestFrom } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 
-import * as RecipesActions from '../../state-management/actions/recipe.action';
-import * as fromApp from '../../state-management/reducers/app.reducer';
-import { Recipe } from 'src/app/recipes/recipe.model';
+import * as RecipesActions from './recipe.action';
+import * as fromApp from '../../store/app.reducer';
+import { Recipe } from '../recipe.model';
 
 @Injectable()
 export class RecipeEffects {

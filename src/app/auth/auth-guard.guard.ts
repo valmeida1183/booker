@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 
 import { AuthService } from './auth.service';
 import { map, tap, take } from 'rxjs/operators';
-import * as fromApp from '../state-management/reducers/app.reducer';
+import * as fromApp from '../store/app.reducer';
 
 @Injectable({
   providedIn: 'root'

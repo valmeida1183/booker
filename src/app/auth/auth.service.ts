@@ -8,8 +8,8 @@ import { Store } from '@ngrx/store';
 import { AuthResponseData } from './authResponseData.model';
 import { User } from './user.model';
 import { environment } from '../../environments/environment';
-import * as fromApp from '../state-management/reducers/app.reducer';
-import * as AuthActions from '../state-management/actions/auth.actions';
+import * as fromApp from '../store/app.reducer';
+import * as AuthActions from './store/auth.actions';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {

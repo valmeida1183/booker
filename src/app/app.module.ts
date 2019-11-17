@@ -13,11 +13,11 @@ import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core.module';
 
 // NgRX Reducers
-import * as fromApp from './state-management/reducers/app.reducer';
+import * as fromApp from './store/app.reducer';
 // NgRX Effects
-import { AuthEffects } from './state-management/effects/auth.effects';
+import { AuthEffects } from './auth/store/auth.effects';
 import { environment } from '../environments/environment';
-import { RecipeEffects } from './state-management/effects/recipe.effects';
+import { RecipeEffects } from './recipes/store/recipe.effects';
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,7 +25,7 @@ import { RecipeEffects } from './state-management/effects/recipe.effects';
   ],
   imports: [
     AppRoutingModule,
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     CoreModule,
     HttpClientModule,
     // RecipesModule, não devemos importar o módulo se queremos carregá-lo como lazy load

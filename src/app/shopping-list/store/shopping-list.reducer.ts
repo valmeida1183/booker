@@ -1,6 +1,6 @@
-import { Ingredient } from 'src/app/shared/ingredient.model';
+import { Ingredient } from '../../shared/ingredient.model';
 // Sintaxe de agrupar tudo de um arquivo em um objeto.
-import * as ShoppingListActions from '../actions/shopping-list.action';
+import * as ShoppingListActions from './shopping-list.action';
 import { Action } from '@ngrx/store';
 
 export interface State {

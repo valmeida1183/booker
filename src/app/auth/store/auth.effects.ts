@@ -5,11 +5,11 @@ import { Actions, ofType, Effect } from '@ngrx/effects'; // "Actions" é um Onse
 import { switchMap, catchError, map, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 
-import { AuthResponseData } from '../../../app/auth/authResponseData.model';
-import { AuthService } from 'src/app/auth/auth.service';
-import * as AuthActions from '../actions/auth.actions';
+import { AuthResponseData } from '../authResponseData.model';
+import { AuthService } from '../auth.service';
+import * as AuthActions from './auth.actions';
 import { environment } from '../../../environments/environment';
-import { User } from 'src/app/auth/user.model';
+import { User } from '../user.model';
 
 // Effects no NgRx é utilizado para tratar "side Effects", que neste exemplo são Http Requests, manipalações no localStorage e roteamento.
 

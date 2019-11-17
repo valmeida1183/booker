@@ -5,8 +5,8 @@ import { Subscription } from 'rxjs';
 
 import { Ingredient } from '../../shared/ingredient.model';
 // Sintaxe de agrupar tudo de um arquivo em um objeto.
-import * as ShoppingListActions from '../../state-management/actions/shopping-list.action';
-import * as fromApp from '../../state-management/reducers/app.reducer';
+import * as ShoppingListActions from '../store/shopping-list.action';
+import * as fromApp from '../../store/app.reducer';
 
 @Component({
   selector: 'bkr-shopping-edit',

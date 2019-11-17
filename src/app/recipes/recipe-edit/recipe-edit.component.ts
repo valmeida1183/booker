@@ -6,8 +6,8 @@ import { map } from 'rxjs/operators';
 
 import { RecipeService } from '../recipe.service';
 import { Recipe } from '../recipe.model';
-import * as fromApp from '../../state-management/reducers/app.reducer';
-import * as RecipesActions from '../../state-management/actions/recipe.action';
+import * as fromApp from '../../store/app.reducer';
+import * as RecipesActions from '../store/recipe.action';
 import { Subscription } from 'rxjs';
 
 @Component({

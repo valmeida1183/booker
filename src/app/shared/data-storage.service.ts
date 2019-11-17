@@ -5,8 +5,8 @@ import { Store } from '@ngrx/store';
 
 import { RecipeService } from '../recipes/recipe.service';
 import { Recipe } from '../recipes/recipe.model';
-import * as fromApp from '../state-management/reducers/app.reducer';
-import * as RecipesActions from '../state-management/actions/recipe.action';
+import * as fromApp from '../store/app.reducer';
+import * as RecipesActions from '../recipes/store/recipe.action';
 
 @Injectable({
   providedIn: 'root'

@@ -7,8 +7,8 @@ import { of } from 'rxjs';
 import { Recipe } from './recipe.model';
 import { DataStorageService } from '../shared/data-storage.service';
 import { RecipeService } from './recipe.service';
-import * as fromApp from '../state-management/reducers/app.reducer';
-import * as RecipesActions from '../state-management/actions/recipe.action';
+import * as fromApp from '../store/app.reducer';
+import * as RecipesActions from './store/recipe.action';
 import { Actions, ofType } from '@ngrx/effects';
 
 @Injectable({

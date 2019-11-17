@@ -8,8 +8,8 @@ import { AuthService } from './auth.service';
 import { AuthResponseData } from './authResponseData.model';
 import { PlaceholderDirective } from '../shared/placeholder/placeholder.directive';
 import { AlertComponent } from '../shared/alert/alert.component';
-import * as fromApp from '../state-management/reducers/app.reducer';
-import * as authActions from '../state-management/actions/auth.actions';
+import * as fromApp from '../store/app.reducer';
+import * as authActions from './store/auth.actions';
 
 @Component({
   selector: 'bkr-auth',

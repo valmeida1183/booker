@@ -4,8 +4,8 @@ import { Store } from '@ngrx/store';
 
 import { Ingredient } from '../shared/ingredient.model';
 import { LogginService } from '../loggin.service';
-import * as ShoppingListActions from '../state-management/actions/shopping-list.action';
-import * as fromApp from '../state-management/reducers/app.reducer';
+import * as ShoppingListActions from './store/shopping-list.action';
+import * as fromApp from '../store/app.reducer';
 
 @Component({
     selector: 'bkr-shopping-list',

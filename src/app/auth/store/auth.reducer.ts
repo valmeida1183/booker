@@ -1,5 +1,5 @@
-import { User } from 'src/app/auth/user.model';
-import * as AuthActions from '../actions/auth.actions';
+import { User } from '../user.model';
+import * as AuthActions from './auth.actions';
 
 export interface State {
    user: User;
